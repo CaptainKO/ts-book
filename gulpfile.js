@@ -9,6 +9,7 @@ var browserify = require('browserify'),
     sourcemaps = require('gulp-sourcemaps');
 var runSequence = require('run-sequence');
 var karma = require('karma');
+var browserSync = require('browser-sync')
 var browserified = transform(function (filename) {
     var b = browserify({
         entries: filename,
@@ -88,5 +89,25 @@ gulp.task('bundle', function(cb) {
 });
 gulp.task('test', function(cb){
     runSequence('bundle', ['karma'], cb);
-})
+});
+gulp.task('browser-sync', ['test'], function() {
+    browserSync({
+        server: {
+            baseDir: "./dist"
+        }
+    });
+
+    return gulp.watch([
+        "./dist/source/js/**/*.js",
+        "./dist/source/css/**.css",
+        "./dist/test/**/**.test.js",
+        "./dist/data/**/**",,
+        "./index.html"
+    ], [browserSync.reload]);
+});
+// gulp.task('scripts', function() {
+//     return gulp.src('src/js/*.js')
+//                .pipe(concat('main.js'))
+//                .pipe(gulp.dest('build/js'));
+// });
 gulp.task('default', ['lint', 'tsc', 'tsc-tests', 'bundle-js', 'bundle-test', 'karma']); // Add them as subtasks of default task
