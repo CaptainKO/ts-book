@@ -26,6 +26,7 @@
     "vinyl-transform": "^1.0.0"
   },
   "devDependencies": {
+    "browser-sync": "^2.24.7",
     "chai": "^4.1.2",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",

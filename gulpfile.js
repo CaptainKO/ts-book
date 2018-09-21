@@ -1,6 +1,6 @@
 // Declarartion
 var gulp = require('gulp');
-var gulp = require('gulp-concat');
+var gulpConcat = require('gulp-concat');
 var tslint = require('gulp-tslint');
 var ts = require('gulp-typescript');
 var browserify = require('browserify'),
@@ -17,7 +17,8 @@ var browserified = transform(function (filename) {
     });
     return b.bundle();
 });
-gulp.task('default', function () { // Declare a function named 'default'
+gulp.task('default', function () { 
+    // Declare a function named 
     console.log('Hello World');
 });
 gulp.task('lint', function () {
@@ -25,7 +26,7 @@ gulp.task('lint', function () {
             './source/ts/**/**.ts', // Read All subfolders and all their *.ts files
             './test/**/**.ts'
         ]).pipe(tslint()) // Output stream will be sent to tslint()
-        .pipe(tslint.report('verbose')); // Output from tslint() will be sent to tslint.report function
+        .pipe(tslint.report("verbose")); // Output from tslint() will be sent to tslint.report function
 }); // Check whether our TypeScript code follows a series of recommended practices
 var tsProject = ts.createProject({
     removeComments: true,
@@ -36,7 +37,7 @@ var tsProject = ts.createProject({
 });
 gulp.task('tsc', function () {
     return gulp.src('/source/ts/**/**.ts') // like lint task
-        .pipe(ts(tsProject))
+        .pipe(tsProject())
         .js.pipe(gulp.dest('./temp/source/js')); // .js write it as *.js file and then write it down
 });
 var tsTestProject = ts.createProject({
@@ -48,7 +49,7 @@ var tsTestProject = ts.createProject({
 });
 gulp.task('tsc-tests', function () {
     return gulp.src('.test/**/**.test.ts')
-        .pipe(ts(tsTestProject))
+        .pipe(tsTestProject())
         .js.pipe(gulp.dest('./temp/test/'));
 });
 gulp.task('bundle-js', function () {
@@ -76,7 +77,7 @@ gulp.task('karma', function (cb) {
             action: 'run'
         }))
         .on('end', cb)
-        .on('error', function (error) {
+        .on('error', function (err) {
             // Make sure failed tests cause gulp to exti non-zero
             throw err;
         });
@@ -110,4 +111,14 @@ gulp.task('browser-sync', ['test'], function() {
 //                .pipe(concat('main.js'))
 //                .pipe(gulp.dest('build/js'));
 // });
-gulp.task('default', ['lint', 'tsc', 'tsc-tests', 'bundle-js', 'bundle-test', 'karma']); // Add them as subtasks of default task
+gulp.task('default', [ 'tsc', 'tsc-tests', 'bundle-js', 'bundle-test', 'karma', 'browser-sync']); // Add them as subtasks of default task
+// gulp.task('default', function(cb) {
+//     runSequence(
+//         'lint',
+//         ['tsc',, 'tsc-tests'],
+//         ['bundle-js', 'bundle-test'],
+//         'karma',
+//         'browser-sync',
+//         cb
+//     );
+// })
